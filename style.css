@@ -180,3 +180,44 @@ nav>img{cursor:pointer;transition:transform .4s}nav>img:hover{transform:rotate(3
 .aerr{color:#c3101a;font-weight:800;font-size:.85rem;min-height:1.2em;margin:0 0 8px}#asub{width:100%}.anote{font-size:.72rem;opacity:.65;text-align:center;margin:12px 0 0}
 #toast{z-index:130}
 @media(max-width:700px){.al{display:none}.ab2{padding:8px 12px}}
+
+nav{height:calc(64px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 4vw 0;backdrop-filter:none;background:#160405}
+.links{align-self:stretch;gap:4px}
+.links a{display:flex;align-items:center;height:100%;padding:0 14px}
+.links a::after{left:14px;right:14px;bottom:12px;width:auto;transition:transform .15s}
+.links a:active::after{transform:scaleX(1)}
+nav button{min-height:44px}
+#trayBtn:hover,.ab2:hover,.btn:hover{transform:none}
+a,button,select,input{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.ph,.mp,.th,.it img,.pc img{animation:none}
+.stm{display:none}
+.vt{animation:none}
+@keyframes vin{from{opacity:0}}
+.view.on{animation-duration:.25s}
+@media (hover:none){
+  .links a::after{display:none}.links a.act::after{display:block}
+  .btn:hover,.c:hover,.it:hover,.pc:hover,.sc:hover,nav>img:hover,.mc.in:hover,.mc:hover .ph,.info div:hover,.cl:hover{transform:none}
+  .ab2:hover:not(.in){background:transparent;color:var(--gold)}
+}
+@media (max-width:700px){
+  nav.hide{transform:none}
+  .links{position:fixed;left:0;right:0;bottom:0;z-index:55;height:calc(58px + env(safe-area-inset-bottom,0px));padding:0 0 env(safe-area-inset-bottom,0px);background:#160405;border-top:2px solid var(--gold);gap:0;font-size:.72rem;align-self:auto}
+  .links a{flex:1;flex-direction:column;justify-content:center;gap:2px;padding:0}
+  .links a::before{font-size:1.3rem;line-height:1}
+  .links a[data-v=home]::before{content:"🏠"}
+  .links a[data-v=dashboard]::before{content:"📊"}
+  .links a[data-v=about]::before{content:"ℹ️"}
+  .links a[data-v=contact]::before{content:"✉️"}
+  .links a::after{left:25%;right:25%;bottom:4px}
+  body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+  #toast{bottom:calc(74px + env(safe-area-inset-bottom,0px))}
+}
+.links a::after{display:none!important}
+.links a.act{color:var(--gold)}
+@media (min-width:701px){
+  .links a{position:relative;align-self:center;height:auto;padding:10px 14px}
+  .links a::before{content:"";position:absolute;left:0;right:0;top:-22px;bottom:-22px}
+}
+nav button{position:relative}
+nav button::before{content:"";position:absolute;inset:-12px -6px}
+.links a.act{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;top:auto!important;z-index:auto!important}

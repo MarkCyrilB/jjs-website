@@ -61,7 +61,7 @@ let cat='All',tray=[],addons=new Set();
 /* floating food */
 function floaty(){const h=$('#hero'),f=document.createElement('div');f.className='fl';f.textContent=['🍜','🔥','🍟','🥤','🌶️','🍳','🧀'][Math.random()*7|0];
 f.style.left=Math.random()*100+'%';f.style.fontSize=(1.4+Math.random()*2)+'rem';f.style.animationDuration=(7+Math.random()*7)+'s';h.appendChild(f);setTimeout(()=>f.remove(),15000)}
-setInterval(floaty,900);for(let i=0;i<6;i++)setTimeout(floaty,i*200);
+setInterval(()=>{if(!document.hidden&&cur==='home'&&scrollY<innerHeight)floaty()},1800);for(let i=0;i<4;i++)setTimeout(floaty,i*250);for(let i=0;i<6;i++)setTimeout(floaty,i*200);
 $('#hero').addEventListener('pointermove',e=>{const r=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty('--mx',(e.clientX-r.left)/r.width*100+'%');e.currentTarget.style.setProperty('--my',(e.clientY-r.top)/r.height*100+'%')});
 /* marquee */
 $('#mq').innerHTML=Array(8).fill('🔥 Anti-gutom 🍜 Samyang 🍟 Fries 🥤 Drinks 🌶️ Spicy ').join('');
@@ -83,7 +83,8 @@ s.querySelectorAll('.it').forEach((b,i)=>b.onclick=()=>{b.classList.remove('ok')
 FOODS.forEach((m,i)=>$('#fg').appendChild(card(m,i)));$('#fg').appendChild(strip('Add ons:',ADD));
 DRINKS.forEach((m,i)=>$('#dg').appendChild(card(m,i,1)));$('#dg').appendChild(strip('Soda and other drinks:',SODA,'dr'));
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
-document.querySelectorAll('.mc,.strip').forEach(e=>io.observe(e));
+const vo=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('vis',e.isIntersecting)),{rootMargin:'100px'});
+document.querySelectorAll('.mc,.strip').forEach(e=>vo.observe(e));
 /* tray */
 function add(it,from){const f=tray.find(x=>x.n===it.n&&x.v===it.v);f?f.q++:tray.push({...it,q:1});fly(from);upd();toast(`${it.n} added`)}
 function upd(){const c=tray.reduce((s,x)=>s+x.q,0),t=tray.reduce((s,x)=>s+x.q*x.p,0);$('#cnt').textContent=c;$('#tot').textContent=peso(t);
@@ -175,7 +176,9 @@ authUI();
 /* router */
 function route(){const h=location.hash.slice(1)||'home',v=VIEWS.includes(h)?h:'home';
 if(v==='dashboard'&&!user){location.hash=cur||'home';openAuth('Log in to open your dashboard',()=>{location.hash='dashboard'});return}
-if(v!==cur){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('act',a.dataset.v===v));cur=v;scrollTo({top:0});
+if(v!==cur){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));document.querySelectorAll('.links a').forEach(a=>a.classList.toggle('act',a.dataset.v===v));cur=v;scrollTo({top:0,behavior:'instant'});
 if(v==='dashboard')dash(true);if(v==='about')document.querySelectorAll('[data-n]').forEach(el=>countUp(el,+el.dataset.n,n=>n));if(v==='contact')cst()}
 if(!VIEWS.includes(h)){const t=document.getElementById(h);if(t)setTimeout(()=>t.scrollIntoView({behavior:'smooth'}),60)}}
 addEventListener('hashchange',route);route();
+(function(){const reveal=()=>document.querySelectorAll('.mc:not(.in),.strip:not(.in)').forEach(el=>{const r=el.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight-40)el.classList.add('in')});
+addEventListener('scroll',reveal,{passive:true});addEventListener('resize',reveal);addEventListener('hashchange',()=>setTimeout(reveal,60));setInterval(reveal,400);reveal()})();
